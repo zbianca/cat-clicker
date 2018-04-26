@@ -63,18 +63,20 @@ const catView = {
             octopus.incrementCounter();
         });
 
-        this.render();
-    },
-
-    render: function() {
-        const currentcat = octopus.getCurrentCat();
-        this.catHeader.innerHTML = currentcat.name;
-        this.catImg.src = currentcat.imgSrc;
-        this.catCounter.innerHTML = `Likes: ${currentcat.clickCount}`;
         this.adminButton = document.getElementById('admin');
         this.adminButton.addEventListener('click', function(){
             octopus.toggleAdminPanel();
         });
+
+        this.render();
+    },
+
+    render: function() {
+
+        const currentCat = octopus.getCurrentCat();
+        this.catHeader.innerHTML = currentCat.name;
+        this.catImg.src = currentCat.imgSrc;
+        this.catCounter.innerHTML = `Likes: ${currentCat.clickCount}`;
     }
 
 };
@@ -83,25 +85,21 @@ const adminView = {
 
     init: function() {
         this.adminPanel = document.getElementById('admin-panel');
-        this.adminPanel.classList.add('hidden');
-        this.cancelButton = null;
-
+        this.cancelButton = document.getElementById('cancel');
+        this.cancelButton.addEventListener('click', function(){
+            octopus.hideAdminPanel();
+        });
     },
 
     render: function() {
-        const currentcat = octopus.getCurrentCat();
+        const currentCat = octopus.getCurrentCat();
         this.nameInput = document.getElementById('change-name');
         this.imgInput = document.getElementById('change-src');
         this.counterInput = document.getElementById('change-counter');
 
-        this.nameInput.placeholder = currentcat.name;
-        this.imgInput.placeholder = currentcat.imgSrc;
-        this.counterInput.placeholder = currentcat.clickCount;
-
-        this.cancelButton = document.getElementById('cancel');
-        this.cancelButton.addEventListener('click', function(){
-            adminView.init();
-        });
+        this.nameInput.placeholder = currentCat.name;
+        this.imgInput.placeholder = currentCat.imgSrc;
+        this.counterInput.placeholder = currentCat.clickCount;
     },
 
 };
@@ -128,7 +126,7 @@ const octopus = {
     setCurrentCat: function(catIndex) {
         model.currentCat = model.cats[catIndex];
         catView.render();
-        adminView.init();
+        this.hideAdminPanel();
     },
 
     incrementCounter: function() {
@@ -140,6 +138,10 @@ const octopus = {
         adminView.adminPanel.classList.toggle('hidden');
         adminView.render();
     },
+
+    hideAdminPanel: function() {
+        adminView.adminPanel.classList.add('hidden');
+    }
 }
 
 octopus.init();
