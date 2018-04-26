@@ -45,8 +45,7 @@ const catListView = {
     },
 
     render: function() {
-        const cat = octopus.getCats();
-        const catsListHtml = cat.map((x, index) => `<li onclick="octopus.setCurrentCat(${index})">${x['name']}</li>`);
+        const catsListHtml = octopus.getCats().map((listObj, index) => `<li onclick="octopus.setCurrentCat(${index})">${listObj['name']}</li>`);
         this.catListUl.innerHTML = catsListHtml.join('');
     }
 
@@ -88,6 +87,10 @@ const adminView = {
         this.cancelButton = document.getElementById('cancel');
         this.cancelButton.addEventListener('click', function(){
             octopus.hideAdminPanel();
+        });
+        this.saveButton = document.getElementById('save');
+        this.saveButton.addEventListener('click', function(){
+            octopus.updateModel();
         });
     },
 
@@ -141,6 +144,19 @@ const octopus = {
 
     hideAdminPanel: function() {
         adminView.adminPanel.classList.add('hidden');
+    },
+
+    updateModel: function() {
+        if (adminView.nameInput.value !== "") {
+            model.currentCat.name = adminView.nameInput.value;
+        }
+        if (adminView.imgInput.value !== "") {
+            model.currentCat.imgSrc = adminView.imgInput.value;
+        }
+        if (adminView.counterInput.value !== "") {
+            model.currentCat.clickCount = adminView.counterInput.value;
+        }
+        catView.render();
     }
 }
 
