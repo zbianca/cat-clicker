@@ -1,0 +1,16 @@
+#cat-list {
+    float: left;
+    margin-right: 300px;
+}
+
+#cat {
+    text-align: center;
+}
+
+input {
+    display: block;
+}
+
+.hidden {
+    display: none;
+}
